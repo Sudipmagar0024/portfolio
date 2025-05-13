@@ -3,29 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Sudip Portfolio</title>
+  <title>Admin Dashboard - Manage Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-950 text-white min-h-screen p-8">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">📬 Admin Dashboard - Messages</h1>
+    <h1 class="text-3xl font-bold">📬 Admin Dashboard</h1>
     <button id="logout" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold">Logout</button>
   </div>
 
-  <div id="messages" class="space-y-4">
-    <p class="text-gray-400">Loading messages...</p>
+  <div class="space-y-6">
+    <h2 class="text-2xl font-semibold">Manage Projects</h2>
+    <form id="project-form" class="space-y-4">
+      <input type="text" id="project-name" placeholder="Project Name" class="w-full p-2 rounded bg-gray-700" required />
+      <textarea id="project-description" placeholder="Project Description" class="w-full p-2 rounded bg-gray-700" required></textarea>
+      <input type="url" id="project-image" placeholder="Image URL" class="w-full p-2 rounded bg-gray-700" required />
+      <input type="url" id="project-link" placeholder="Project Link" class="w-full p-2 rounded bg-gray-700" required />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-semibold">Add Project</button>
+    </form>
+
+    <h2 class="text-2xl font-semibold">Manage Gallery</h2>
+    <form id="gallery-form" class="space-y-4">
+      <input type="url" id="gallery-image" placeholder="Image URL" class="w-full p-2 rounded bg-gray-700" required />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-semibold">Add Gallery Image</button>
+    </form>
+
+    <h2 class="text-2xl font-semibold">Manage Messages</h2>
+    <div id="messages" class="space-y-4">
+      <p class="text-gray-400">Loading messages...</p>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBslY4qmfYELo0A3rJ7i_4rdUcV1QHWG1I",
       authDomain: "sudip-portfolio.firebaseapp.com",
       projectId: "sudip-portfolio",
-      storageBucket: "sudip-portfolio.firebasestorage.app",
+      storageBucket: "sudip-portfolio.appspot.com",
       messagingSenderId: "308875799529",
       appId: "1:308875799529:web:57f16e069b1a5b7f307978",
       measurementId: "G-8LJKDBQ697"
@@ -34,16 +52,16 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-
-    const messagesRef = collection(db, "messages");
+    const projectForm = document.getElementById("project-form");
+    const galleryForm = document.getElementById("gallery-form");
     const messagesContainer = document.getElementById("messages");
 
     // Redirect if not logged in
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loadMessages();
-      } else {
+      if (!user) {
         window.location.href = "/pages/login.html";
+      } else {
+        loadMessages();
       }
     });
 
@@ -53,8 +71,47 @@
       window.location.href = "/pages/login.html";
     });
 
-    // Load Messages
+    // Add new project
+    projectForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("project-name").value;
+      const description = document.getElementById("project-description").value;
+      const image = document.getElementById("project-image").value;
+      const link = document.getElementById("project-link").value;
+
+      try {
+        await addDoc(collection(db, "projects"), {
+          name,
+          description,
+          image,
+          link
+        });
+        alert("Project added successfully!");
+        loadProjects(); // Reload the list
+      } catch (error) {
+        console.error("Error adding project: ", error);
+      }
+    });
+
+    // Add new gallery image
+    galleryForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const image = document.getElementById("gallery-image").value;
+
+      try {
+        await addDoc(collection(db, "gallery"), {
+          image
+        });
+        alert("Gallery image added successfully!");
+        loadGallery(); // Reload the list
+      } catch (error) {
+        console.error("Error adding gallery image: ", error);
+      }
+    });
+
+    // Load messages
     async function loadMessages() {
+      const messagesRef = collection(db, "messages");
       const q = query(messagesRef, orderBy("timestamp", "desc"));
       const querySnapshot = await getDocs(q);
 
@@ -66,18 +123,32 @@
 
       querySnapshot.forEach(doc => {
         const data = doc.data();
-        const card = document.createElement("div");
-        card.className = "bg-gray-800 p-4 rounded-lg shadow-md";
-
-        card.innerHTML = `
+        const messageCard = document.createElement("div");
+        messageCard.className = "bg-gray-800 p-4 rounded-lg shadow-md";
+        messageCard.innerHTML = `
           <p><strong>Name:</strong> ${data.name}</p>
           <p><strong>Email:</strong> ${data.email}</p>
           <p class="my-2"><strong>Message:</strong><br>${data.message}</p>
           <p class="text-sm text-gray-400">Received: ${data.timestamp?.toDate ? new Date(data.timestamp.toDate()).toLocaleString() : 'N/A'}</p>
         `;
-
-        messagesContainer.appendChild(card);
+        messagesContainer.appendChild(messageCard);
       });
+    }
+
+    // Load projects (for editing/deleting)
+    async function loadProjects() {
+      const projectsRef = collection(db, "projects");
+      const querySnapshot = await getDocs(projectsRef);
+
+      // Display projects
+    }
+
+    // Load gallery (for editing/deleting)
+    async function loadGallery() {
+      const galleryRef = collection(db, "gallery");
+      const querySnapshot = await getDocs(galleryRef);
+
+      // Display gallery images
     }
   </script>
 </body>

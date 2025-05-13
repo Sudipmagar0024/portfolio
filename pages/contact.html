@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact - Sudip Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+  <form action="submit_message.php" method="POST" class="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md space-y-4">
+    <h2 class="text-2xl font-bold text-center mb-4">📨 Contact Me</h2>
+    
+    <div>
+      <label class="block text-sm mb-1">Name</label>
+      <input type="text" name="name" required class="w-full p-2 bg-gray-700 border border-gray-600 rounded" />
+    </div>
+    
+    <div>
+      <label class="block text-sm mb-1">Email</label>
+      <input type="email" name="email" required class="w-full p-2 bg-gray-700 border border-gray-600 rounded" />
+    </div>
+    
+    <div>
+      <label class="block text-sm mb-1">Message</label>
+      <textarea name="message" rows="4" required class="w-full p-2 bg-gray-700 border border-gray-600 rounded"></textarea>
+    </div>
+    
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded font-semibold">Send Message</button>
+  </form>
+</body>
+</html>
