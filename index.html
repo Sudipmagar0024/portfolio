@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sudip Thapa Magar's personal portfolio showcasing skills in web development, hospitality, and mechanics." />
+  <meta name="author" content="Sudip Thapa Magar" />
+  <meta name="keywords" content="Sudip Thapa Magar, Portfolio, Web Developer, Mechanic, Hospitality, Projects" />
   <title>Sudip Magar - Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .skill-bar {
+      height: 1.25rem;
+      border-radius: 9999px;
+      background-color: #2d3748;
+      overflow: hidden;
+    }
+    .skill-level {
+      height: 100%;
+      transition: width 1.5s ease-in-out;
+    }
+  </style>
 </head>
 <body class="bg-black text-white">
 
@@ -19,11 +34,59 @@
     </nav>
   </header>
 
+  <!-- Intro Section -->
   <section class="px-6 py-10">
     <h2 class="text-4xl font-bold text-center mb-6">Welcome to My Portfolio</h2>
     <p class="text-center text-lg text-gray-400">Explore my projects, gallery, and more.</p>
   </section>
 
+  <!-- About Me Section -->
+  <section class="px-6 py-10 text-center">
+    <h2 class="text-3xl font-bold mb-6">About Me</h2>
+    <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+      Hello! I'm <strong>Sudip Thapa Magar</strong>, a passionate individual who passed <strong>BLE</strong> from <strong>UN School</strong> and <strong>SEE</strong> from <strong>Satya Shishu Nitekatan School</strong>. 
+      Currently working as staff at <strong>Tokubetsu</strong>. I'm also a small vlogger on YouTube and a content creator on Instagram and TikTok.
+    </p>
+  </section>
+
+  <!-- Skills Section (Bar Graph Style) -->
+  <section class="px-6 py-14 bg-black text-white">
+    <h2 class="text-3xl font-bold mb-10 text-center">My Skills</h2>
+    <div class="max-w-3xl mx-auto space-y-8">
+
+      <!-- Full Stack -->
+      <div>
+        <h3 class="text-xl font-semibold text-blue-400 mb-2">Full Stack Web Development</h3>
+        <div class="mb-2">HTML</div>
+        <div class="skill-bar"><div class="skill-level bg-blue-500" style="width: 70%;"></div></div>
+        <div class="mt-2">CSS</div>
+        <div class="skill-bar"><div class="skill-level bg-blue-400" style="width: 50%;"></div></div>
+        <div class="mt-2">JavaScript</div>
+        <div class="skill-bar"><div class="skill-level bg-blue-300" style="width: 10%;"></div></div>
+      </div>
+
+      <!-- Mechanic -->
+      <div>
+        <h3 class="text-xl font-semibold text-green-400 mb-2">Mechanic</h3>
+        <div class="mb-2">Bike Mechanic</div>
+        <div class="skill-bar"><div class="skill-level bg-green-500" style="width: 100%;"></div></div>
+      </div>
+
+      <!-- HM Skills -->
+      <div>
+        <h3 class="text-xl font-semibold text-purple-400 mb-2">Hospitality Management</h3>
+        <div class="mb-2">Waitering</div>
+        <div class="skill-bar"><div class="skill-level bg-purple-500" style="width: 60%;"></div></div>
+        <div class="mt-2">Bartendering</div>
+        <div class="skill-bar"><div class="skill-level bg-purple-400" style="width: 30%;"></div></div>
+        <div class="mt-2">Dishwasher</div>
+        <div class="skill-bar"><div class="skill-level bg-purple-300" style="width: 75%;"></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="text-center text-gray-500 mt-10 text-sm">
     &copy; 2025 Sudip Magar. All rights reserved.
   </footer>
